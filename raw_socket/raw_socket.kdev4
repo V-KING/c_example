@@ -1,0 +1,3 @@
+[Project]
+Manager=KDevCustomMakeManager
+Name=raw_socket

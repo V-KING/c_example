@@ -1,0 +1,52 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CHECK_VALUE	crc.h	39;"	d
+CHECK_VALUE	crc.h	51;"	d
+CHECK_VALUE	crc.h	63;"	d
+CRC_CCITT	crc.h	26;"	d
+CRC_NAME	crc.h	33;"	d
+CRC_NAME	crc.h	45;"	d
+CRC_NAME	crc.h	57;"	d
+FALSE	crc.h	20;"	d
+FINAL_XOR_VALUE	crc.h	36;"	d
+FINAL_XOR_VALUE	crc.h	48;"	d
+FINAL_XOR_VALUE	crc.h	60;"	d
+INITIAL_REMAINDER	crc.h	35;"	d
+INITIAL_REMAINDER	crc.h	47;"	d
+INITIAL_REMAINDER	crc.h	59;"	d
+POLYNOMIAL	crc.h	34;"	d
+POLYNOMIAL	crc.h	46;"	d
+POLYNOMIAL	crc.h	58;"	d
+REFLECT_DATA	crc.c	28;"	d	file:
+REFLECT_DATA	crc.c	29;"	d	file:
+REFLECT_DATA	crc.c	31;"	d	file:
+REFLECT_DATA	crc.c	32;"	d	file:
+REFLECT_DATA	crc.h	37;"	d
+REFLECT_DATA	crc.h	49;"	d
+REFLECT_DATA	crc.h	61;"	d
+REFLECT_REMAINDER	crc.c	36;"	d	file:
+REFLECT_REMAINDER	crc.c	37;"	d	file:
+REFLECT_REMAINDER	crc.c	39;"	d	file:
+REFLECT_REMAINDER	crc.c	40;"	d	file:
+REFLECT_REMAINDER	crc.h	38;"	d
+REFLECT_REMAINDER	crc.h	50;"	d
+REFLECT_REMAINDER	crc.h	62;"	d
+TOPBIT	crc.c	25;"	d	file:
+TRUE	crc.h	21;"	d
+WIDTH	crc.c	24;"	d	file:
+_crc_h	crc.h	17;"	d
+crc	crc.h	/^typedef unsigned long  crc;$/;"	t
+crc	crc.h	/^typedef unsigned short  crc;$/;"	t
+crcFast	crc.c	/^crcFast(unsigned char const message[], int nBytes)$/;"	f	signature:(unsigned char const message[], int nBytes)
+crcFast	crc.h	/^crc   crcFast(unsigned char const message[], int nBytes);$/;"	p	signature:(unsigned char const message[], int nBytes)
+crcInit	crc.c	/^crcInit(void)$/;"	f	signature:(void)
+crcInit	crc.h	/^void  crcInit(void);$/;"	p	signature:(void)
+crcSlow	crc.c	/^crcSlow(unsigned char const message[], int nBytes)$/;"	f	signature:(unsigned char const message[], int nBytes)
+crcSlow	crc.h	/^crc   crcSlow(unsigned char const message[], int nBytes);$/;"	p	signature:(unsigned char const message[], int nBytes)
+crcTable	crc.c	/^crc  crcTable[256];$/;"	v
+main	main.c	/^main(void)$/;"	f	signature:(void)
+reflect	crc.c	/^reflect(unsigned long data, unsigned char nBits)$/;"	f	file:	signature:(unsigned long data, unsigned char nBits)
