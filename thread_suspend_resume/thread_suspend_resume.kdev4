@@ -1,0 +1,3 @@
+[Project]
+Manager=KDevCustomMakeManager
+Name=thread_suspend_resume

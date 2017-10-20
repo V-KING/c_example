@@ -17,7 +17,7 @@ do{printf("\033[31m""[%s: %s:%d]" fmt"\033[0m" ,\
 		__FILE__, __FUNCTION__, __LINE__,  ##arg );  }while(0);  
 
 #define debug_grean( fmt,  arg  ... )   \  
-do{printf("\033[32m""[%s: %s:%d]" fmt"\033[0m" ,\  
+do{printf("\033[32m""[%s: %s:%d]" fmt"\033[0m" , \
 		__FILE__, __FUNCTION__, __LINE__,  ##arg );  }while(0);  
 
 #define debug_yellow( fmt,  arg  ... )   \  
@@ -44,12 +44,9 @@ int main()
 	DEBUG2("I AM IN macro.c\n");  
 
 	debug_black("I AM IN macro.c\n");  
-	PrintColor2("I AM IN macro.c\n");  
-	PrintColor3("I AM IN macro.c\n");     
-	PrintColor4("I AM IN macro.c\n");  
-	PrintColor5("I AM IN macro.c\n");     
-	PrintColor6("I AM IN macro.c\n");  
-	PrintColor7("I AM IN macro.c\n");  
+	debug_red("I AM IN macro.c\n");  
+	debug_grean("I AM IN macro.c\n");  
+	debug_blue("I AM IN macro.c\n");  
 
 	return 0;  
 }  

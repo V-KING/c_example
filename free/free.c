@@ -18,7 +18,7 @@ void freePointer(char *a){
 	free(a);
 	a = NULL;
 }
-#if 0
+#if 1
 int main(int argc, const char *argv[])
 {
 	char *a=NULL;
@@ -30,6 +30,16 @@ int main(int argc, const char *argv[])
 #ifdef TEST0
 	memset(a, 0, 10);
 #endif
+    free(a);
+//     free(a);//can't free twice
+    if(NULL == a)
+        printf("1111\n");
+    else
+        printf("2222=|%s|\n",a);//atfter free will not be NULL
+    
+    if(*a==0){
+        printf("is null string, already set 0, be free. but some case: set value = 0\n");
+    }
 
 
 #ifdef TEST1
@@ -45,15 +55,11 @@ int main(int argc, const char *argv[])
 	free(a);
 
 
-#ifdef TEST3
-	char *p = freePointer(a);
-	free(p);
-#endif
 
 	return 0;
 }
 #endif
-#if 1
+#if 0
 int main(int argc, const char *argv[])
 {
 	char *a=NULL;

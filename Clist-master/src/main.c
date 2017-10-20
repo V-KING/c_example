@@ -6,15 +6,16 @@
 #include <malloc.h>
 #include "list.h"
 
+
 #if 0
 #define print_dbg(fmt, arg...)
 #define print_info(fmt, arg...)
 #define print_err(fmt, arg...)
 #else
-#define print_dbg(fmt, arg...)      printf("[DBG][%s:%d %s]"fmt, __FILE__, __LINE__, __FUNCTION__, ##arg)
-#define print_info(fmt, arg...)     printf("[INFO][%s:%d %s]"fmt, __FILE__, __LINE__, __FUNCTION__, ##arg)
-#define print_err(fmt, arg...)      printf("[ERR][%s:%d %s]"fmt, __FILE__, __LINE__, __FUNCTION__, ##arg)
-#define print_pAddr(p1, p2)         printf("[Addr compare][%s:%d %s][0x%x :: 0x%x]\n", __FILE__, __LINE__, __FUNCTION__,p1,p2)
+#define print_dbg(fmt, arg...)      printf("\033[36m[DBG ][%s: %s:%d]"fmt, __FILE__, __FUNCTION__, __LINE__, ##arg);
+#define print_info(fmt, arg...)     printf("\033[32m[INFO][%s: %s:%d]"fmt, __FILE__, __FUNCTION__, __LINE__, ##arg);
+#define print_err(fmt, arg...)      printf("\033[31m[ERR ][%s: %s:%d]"fmt, __FILE__, __FUNCTION__, __LINE__, ##arg);
+#define print_pAddr(p1, p2)         printf("\033[37m[Addr compare][%s: %s:%d][0x%x :: 0x%x]\n", __FILE__, __FUNCTION__, __LINE__, p1,p2);
 #endif
 
 #ifdef INVG_RELEASE
@@ -23,6 +24,7 @@
 #define print_err(fmt, arg...)
 #define print_pAddr(p1, p2)
 #endif
+
 
 LIST_DEF(Int_List)
 	int data;
@@ -127,32 +129,7 @@ Int_List *list_Int_List_remove(list *l, int data){
 	return pNode;
 }
 
-#define list_find_loop(type, data) \
-	type *pNode; \
-	list_for_each(type *, i, l ){\
-		pNode = i;\
-		if(i->data == data){\
-			break;\
-		}\
-	} for_each_end \
-	if(pNode->node.next == l->head){\
-		return NULL;\
-	}\
-	return pNode;\
-	
-#define list_find_loop_end()
-/*
- * @brief: look list_Int_List_find()
- */
-Int_List* list_find_byXX(list *l,int data)  {  
-	if(NULL == l || NULL == l->head) { 
-		return NULL;
-	}
-	list_find_loop(Int_List, data)
-	list_find_loop_end()
-}  
-
-void listDeleteAll(list *l){
+void listDeleteAll_Int_List(list *l){
 	if(NULL==l || NULL==l->head){
 		return;
 	}
@@ -167,11 +144,14 @@ void listDeleteAll(list *l){
 		list_node *p = tail;// or list_node *p = pos->next;
 		list_node *n = pos->next;
 		i = (Int_List *)pos;
-		//print_info("rm[data ,p   ,pos,n        ]=[%02d,0x%x,0x%x,0x%x]\n",i->data,p , pos  , n);
+		//print_err("rm[data ,p   ,pos,n        ]=[%02d,0x%x,0x%x,0x%x]\n",i->data,p , pos  , n);
 		p->next = n; 
 		n->prev = p;  
 		
 		if (pos == pos->next) {
+            print_err("tail node\n");
+            // TODO: destruct(i)
+            free(i);//  After free i, U can't use i
 			l->head = NULL;
 			break;
 		}
@@ -181,9 +161,36 @@ void listDeleteAll(list *l){
 	}
 }
 
+#define list_find_loop(type, data) \
+    type *pNode; \
+    list_for_each(type *, i, l ){\
+        pNode = i;\
+        if(i->data == data){\
+            break;\
+        }\
+    } for_each_end \
+    if(pNode->node.next == l->head){\
+        return NULL;\
+    }\
+    return pNode;\
+    
+#define list_find_loop_end()
+/*
+ * @brief: look list_Int_List_find()
+ */
+Int_List* list_find_byXX(list *l,int data)  {  
+    if(NULL == l || NULL == l->head) { 
+        return NULL;
+    }
+    list_find_loop(Int_List, data)
+    list_find_loop_end()
+}  
+
+
 list* l;
 #if 1
 int main() {
+    print_dbg("### Begin..\n");
 	l = Create_List();
 	list_order_add(l, Create_Int_List(9));
 	list_order_add(l, Create_Int_List(1));
@@ -197,26 +204,41 @@ int main() {
 	Int_List *d1 = Create_Int_List(10);
 	printf("d1 = 0x%x\n",d1);
 	list_order_add(l, d1);
-	
-	print_info("---0----------------\n");
+    
+	print_info("1. show list:\n");
 	list_for_each(Int_List* , i, l) {
 		printf("%d\n", i->data);
 	} for_each_end
-	take_head_data(l);
-	take_head_data(l);
+    print_info("#######################################################################\n\n");
+
 	
-	print_info("---1----------------\n");
+    print_info("2. take_head_data...\n");
+	take_head_data(l);
+	take_head_data(l);
+	print_info("After take 2 head:\n");
 	list_for_each(Int_List* , i, l) {
 		printf("%d\n", i->data);
 	} for_each_end
-	print_info("---2----------------\n");
+    print_info("#######################################################################\n\n");
 		
+    
+    print_info("3. After list_Int_List_find(l, 10) : \n");
 	printf("d2 = 0x%02x\n",list_Int_List_find(l, 10));
 	printf("d3 = 0x%02x\n",list_find_byXX(l, 10));
-	print_info("---3----------------\n");
-	
+    print_info("#######################################################################\n\n");
+
+    //find nothing
+    print_info("4. find nothing data=111 whitch not in list :\n");
+    printf("d2 = 0x%02x\n",l);
+    printf("d2 = 0x%02x\n",l->head);
+    printf("d2 = 0x%02x\n",l);
+    printf("d2 = 0x%02x\n",(list *)l->head);
+    printf("d2 = 0x%02x\n",list_Int_List_find(l, 111));
+    printf("d2 = 0x%02x\n",list_find_byXX(l, 111));
+    print_info("#######################################################################\n\n");   
+    
 	//remove
-	print_info("---4----------------\n");
+	print_info("5. list_Int_List_remove test :\n");
 	Int_List *p = list_Int_List_remove(l, 4);
 	print_info("l            =0x%x\n", l);
 	print_info("l->head      =0x%x\n", l->head);
@@ -227,39 +249,20 @@ int main() {
 		printf("%d\n", i->data);
 		print_info("[p ,pos  ,n        ]=[0x%x,0x%x,0x%x]\n",pos->prev, pos  , pos->next);
 	} for_each_end
+    print_info("#######################################################################\n\n");
 	
-	printf("---5----------------\n");
-	listDeleteAll(l);
+	printf("7. listDeleteAll_Int_List(l) test:\n");
+	listDeleteAll_Int_List(l);
+    printf("After listDeleteAll_Int_List(l) :\n");
 	if(!list_empty(l)){
 		list_for_each(Int_List* , i, l) {
 			printf("%d\n", i->data);
 		} for_each_end
 	}
+	print_info("#######################################################################\n\n");
 	
-	//find nothing
-	printf("---6----------------\n");
-	printf("d2 = 0x%02x\n",l);
-	printf("d2 = 0x%02x\n",l->head);
-	printf("d2 = 0x%02x\n",l);
-	printf("d2 = 0x%02x\n",(list *)l->head);
-	printf("d2 = 0x%02x\n",list_Int_List_find(l, 111));
-	printf("d2 = 0x%02x\n",list_find_byXX(l, 111));
 	
-    return 0;
-}
-#endif
-
-#if 0
-int main() {
-	l = Create_List();
-	list_add(l, (list_node*)Create_Int_List(3));
-	list_add(l, (list_node*)Create_Int_List(8));
-	list_add(l, (list_node*)Create_Int_List(5));
-
-	list_for_each(Int_List* , i, l) {
-		printf("%d\n", i->data);
-	} for_each_end	
-	
+    print_dbg("### End....\n");
     return 0;
 }
 #endif
