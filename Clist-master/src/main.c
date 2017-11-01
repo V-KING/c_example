@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
 #include "list.h"
 
 
@@ -130,6 +131,21 @@ Int_List *list_Int_List_remove(list *l, int data){
 }
 
 void listDeleteAll_Int_List(list *l){
+    /*************method 1:*****************/
+    if(NULL==l || NULL==l->head){
+        return;
+    }
+    list_for_each(Int_List*, i, l){
+        if(i->node.next == l->head){
+            l->head = NULL;
+            print_err("1\n");
+        }
+        print_err("i=%d\n", i->data);
+        memset(i, 0, sizeof(Int_List));
+        free(i);
+    }for_each_end
+    return;
+    /*************method 2:*****************/
 	if(NULL==l || NULL==l->head){
 		return;
 	}
