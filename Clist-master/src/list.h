@@ -87,15 +87,24 @@ typedef struct _list
  * @param ele  遍历的临时变量名称
  * @param list 要遍历的列表
  */
+// #define list_for_each(type, ele, list) \
+// 	{ type ele; list_node* pos; list_node* head = list->head; char b; \
+// 	for (pos = (head), ele = (type) pos, b = 1; \
+// 		(pos != (head) || b); \
+//         pos = pos->next, ele = (type) pos, b = 0)
+// 
+// 
+// #define for_each_end }
+
 #define list_for_each(type, ele, list) \
-	{ type ele; list_node* pos; list_node* head = list->head; char b; \
-	for (pos = (head), ele = (type) pos, b = 1; \
-		(pos != (head) || b); \
-        pos = pos->next, ele = (type) pos, b = 0)
+    { type ele; list_node* pos; list_node* head = list->head; char b; \
+    for (pos = (head), ele = (type) pos, b = 1; \
+        (pos != (head) || b)&&(head != NULL); \
+        ){ \
+        ele = (type) pos;pos = pos->next;b = 0;
 
 
-#define for_each_end }
-
+#define for_each_end }}
 /**
  * @brief 链表结构的构造函数
  * @return 链表结构体指针

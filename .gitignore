@@ -2,15 +2,11 @@
 *.swp
 *.kdev4
 *.bak
-lirp_808
-xcrf808
 clean.sh
-gdbserver
-gdb
-example1
 libthread_db-1.0.so
 *.bp
-Definitions/Core/lirp/out/*
+a.out
+
 
 # Object files
 *.o
