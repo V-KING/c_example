@@ -6,6 +6,11 @@ clean.sh
 libthread_db-1.0.so
 *.bp
 a.out
+createXMLfile
+getAllNodeName
+perseXMLdoc
+setXMLdoc
+xmlWrite
 
 
 # Object files
