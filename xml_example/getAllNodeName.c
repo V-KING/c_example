@@ -70,9 +70,9 @@ static int parse_phone_book(const char *file_name)
 		goto FAILED;
 	}
 
-	if ((xmlStrcmp(cur->name, (const xmlChar *)"phone_books")))
+	if ((xmlStrcmp(cur->name, (const xmlChar *)"SysConf808")))
 	{
-		fprintf(stderr, "The root is not phone_books.\n");
+		fprintf(stderr, "The root is not SysConf808.\n");
 		goto FAILED;
 	}
 

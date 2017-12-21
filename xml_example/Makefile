@@ -15,7 +15,7 @@ C_FILES = $(shell ls *.c)
 
 NAME = createXMLfile
 
-all:$(NAME) perseXMLdoc getAllNodeName
+all:$(NAME) perseXMLdoc getAllNodeName setXMLdoc xmlWrite
 
 $(NAME):$(OBJ_FILES)
 	$(CC) $(CFLAGS) $(INCLUDE) $^ -lpthread  -o $@ $(LIB) $(RELEASE_FLAG)
@@ -26,10 +26,15 @@ perseXMLdoc:perseXMLdoc.o
 getAllNodeName:getAllNodeName.o
 	$(CC) $(CFLAGS) $(INCLUDE) $^ -lpthread  -o $@ $(LIB) $(RELEASE_FLAG)
 	
+setXMLdoc:setXMLdoc.o
+	$(CC) $(CFLAGS) $(INCLUDE) $^ -lpthread  -o $@ $(LIB) $(RELEASE_FLAG)
+	
+xmlWrite:xmlWrite.o
+	$(CC) $(CFLAGS) $(INCLUDE) $^ -lpthread  -o $@ $(LIB) $(RELEASE_FLAG)
 clean:
 	rm $(NAME) *.o 
 	find ./ -name "*~" -or -name "*~" | xargs rm -rf
-	rm perseXMLdoc getAllNodeName
+	rm perseXMLdoc getAllNodeName setXMLdoc xmlWrite
 
 # check_s:
 # 	valgrind ./server

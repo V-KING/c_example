@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phone_books>
-	<phone id="10">
-		<name>Anker</name>
-		<tel>13223246599</tel>
-		<address>Shenzheng</address>
-	</phone>
-	<phone1 id="10">
-		111
-		<name>Anker</name>
-        <tel>13223246599</tel>
-        <address>Shenzheng</address>
-    </phone1>
-	<phone2 id="10">
-		222
-		<name>Anker</name>
-        <tel>13223246599</tel>
-        <address>Shenzheng</address>
-    </phone2>
-</phone_books>
+<SysConf808>
+    <RfidModule>
+        <IoReset_Flag>qqq</IoReset_Flag>
+        <IoReset_Time>bbb</IoReset_Time>
+    </RfidModule>
+    <RfidModule>
+        <IoReset_Flag>qqq</IoReset_Flag>
+        <IoReset_Time>bbb</IoReset_Time>
+    </RfidModule>
+</SysConf808>

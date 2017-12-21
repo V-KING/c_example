@@ -16,25 +16,18 @@ static int parse_phone(xmlDocPtr doc, xmlNodePtr cur)
 	cur = cur->xmlChildrenNode;
 	while (cur != NULL)
 	{
-		//获取name
-		if ((!xmlStrcmp(cur->name, (const xmlChar *)"name")))
+		//获取IoReset_Flag
+		if ((!xmlStrcmp(cur->name, (const xmlChar *)"IoReset_Flag")))
 		{
 			key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-			printf("name: %s\t", key);
+			printf("IoReset_Flag: %s\t", key);
 			xmlFree(key);
 		}
 		//获取tel
-		if ((!xmlStrcmp(cur->name, (const xmlChar *)"tel")))
+		if ((!xmlStrcmp(cur->name, (const xmlChar *)"IoReset_Time")))
 		{
 			key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-			printf("tel: %s\t", key);
-			xmlFree(key);
-		}
-		//获取address
-		if ((!xmlStrcmp(cur->name, (const xmlChar *)"address")))
-		{
-			key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-			printf("address: %s\n", key);
+			printf("IoReset_Time: %s\t", key);
 			xmlFree(key);
 		}
 		cur = cur->next;
@@ -66,9 +59,9 @@ static int parse_phone_book(const char *file_name)
 		goto FAILED;
 	}
 
-	if ((xmlStrcmp(cur->name, (const xmlChar *)"phone_books")))
+	if ((xmlStrcmp(cur->name, (const xmlChar *)"SysConf808")))
 	{
-		fprintf(stderr, "The root is not phone_books.\n");
+		fprintf(stderr, "The root is not SysConf808.\n");
 		goto FAILED;
 	}
 
@@ -76,13 +69,14 @@ static int parse_phone_book(const char *file_name)
 	cur = cur->xmlChildrenNode;
 	while (cur != NULL)
 	{
-		if ((!xmlStrcmp(cur->name, (const xmlChar *)"phone")))
+		if ((!xmlStrcmp(cur->name, (const xmlChar *)"RfidModule")))
 		{
-			id = xmlGetProp(cur, "id");
-			printf("id:%s\t",id);
+			//id = xmlGetProp(cur, "id");
+			//printf("id:%s\t",id);
 			parse_phone(doc, cur);
 		}
 		cur = cur->next;
+        printf("\n");
 	}
 	xmlFreeDoc(doc);
 	return 0;

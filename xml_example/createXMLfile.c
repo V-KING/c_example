@@ -26,7 +26,7 @@ typedef struct phone_t {
 	int id;              //编号
 	char name[NAME_STR_LEN];     //姓名
 	char tel[TEL_STR_LEN];       //电话
-	char address[ADDR_STR_LEN];  //地址
+// 	char address[ADDR_STR_LEN];  //地址
 }phone;
 
 //设置通讯录项
@@ -35,9 +35,8 @@ static void set_phone_item(phone *phone_item)
 	assert(phone_item);
 
 	phone_item->id = 10;
-	snprintf(phone_item->name, NAME_STR_LEN, "%s", "Anker");
-	snprintf(phone_item->tel, TEL_STR_LEN, "%s", "13223246599");
-	snprintf(phone_item->address, ADDR_STR_LEN, "%s", "Shenzheng");
+	snprintf(phone_item->name, NAME_STR_LEN, "%s", "1");
+	snprintf(phone_item->tel, TEL_STR_LEN, "%s", "2345");
 }
 
 //创建phone节点
@@ -48,18 +47,17 @@ static xmlNodePtr create_phone_node(const phone *phone_item)
 	char id[ID_STR_LEN] = {0};
 	xmlNodePtr phone_node = NULL;
 
-	phone_node = xmlNewNode(NULL, BAD_CAST"phone");
+	phone_node = xmlNewNode(NULL, BAD_CAST"RfidModule");
 	if (phone_node == NULL) {
 		fprintf(stderr, "Failed to create new node.\n");
 		return NULL;
 	}
 	//设置属性
 	snprintf(id, ID_STR_LEN, "%d", phone_item->id);
-	xmlNewProp(phone_node, BAD_CAST"id", (xmlChar*)id);
+	//xmlNewProp(phone_node, BAD_CAST"id", (xmlChar*)id);
 
-	xmlNewChild(phone_node, NULL, BAD_CAST"name", (xmlChar *)phone_item->name);
-	xmlNewChild(phone_node, NULL, BAD_CAST"tel", (xmlChar *)phone_item->tel);
-	xmlNewChild(phone_node, NULL, BAD_CAST"address", (xmlChar *)phone_item->address);
+	xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Flag", (xmlChar *)phone_item->name);
+	xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Time", (xmlChar *)phone_item->tel);
 
 	return phone_node;
 }
@@ -112,7 +110,7 @@ static int create_phone_books(const char *phone_book_file)
 	}
 
 	//创建根节点
-	root_node = xmlNewNode(NULL, BAD_CAST"phone_books");
+	root_node = xmlNewNode(NULL, BAD_CAST"SysConf808");
 	if (root_node == NULL) {
 		fprintf(stderr, "Failed to new root node.\n");
 		goto FAILED;
@@ -166,12 +164,14 @@ static int add_phone_node(const char *phone_book_file)
 	//将文档保存到文件中，按照utf-8编码格式保存
 	xmlSaveFormatFileEnc(phone_book_file, doc, "UTF-8", 1);
 	xmlFreeDoc(doc);
+    xmlCleanupParser();
 
 	return 0;
 FAILED:
 	if (doc) {
 		xmlFreeDoc(doc);
 	}
+	xmlCleanupParser();
 
 	return -1;
 }
