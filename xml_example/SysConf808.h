@@ -9,11 +9,11 @@
     </RfidModule>
 </SysConf808>
 */
-typedef struct RfidModule{
+typedef struct RfidModule {
     /* Must have this menber*/
-    char *nodeName;        
+    char *nodeName;
     /* below according the need to add and define*/
-    char* str_IoReset_Flag; 
+    char* str_IoReset_Flag;
     char* str_IoReset_Time;
 } tSRfidModule;
 /****end  <RfidModule>**********************/
@@ -27,11 +27,11 @@ typedef struct RfidModule{
     </Network>
 </SysConf808>
 */
-typedef struct Network{
+typedef struct Network {
     /* Must have this menber*/
-    char *nodeName;        
+    char *nodeName;
     /* below according the need to add and define*/
-    char* ip; 
+    char* ip;
     char* mac;
 } tSNetwork;
 /****end  <Network>**********************/

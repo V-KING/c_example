@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SysConf808>
+    <Network>
+        <ip>192.168.1.1</ip>
+        <mac>ff:ee:dd:aa</mac>
+    </Network>
+    <RfidModule>
+        <IoReset_Flag>yes</IoReset_Flag>
+        <IoReset_Time>2000</IoReset_Time>
+    </RfidModule>
+<RfidModule><IoReset_Flag>1</IoReset_Flag><IoReset_Time>2345</IoReset_Time></RfidModule></SysConf808>

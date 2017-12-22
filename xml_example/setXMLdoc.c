@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <memory.h>
 
 #include <libxml2/libxml/xmlmemory.h>
 #include <libxml2/libxml/parser.h>
@@ -17,18 +18,18 @@ static xmlNodePtr _Cur;
  *      0, success
  *      -1, err
  */
-int set_Network(void *arg){
-    if(NULL == arg){
+int set_Network(void *arg) {
+    if(NULL == arg) {
         fprintf(stderr, "arg is null, return -1\n");
         return -1;
     }
     xmlChar *key;
-    
+
     tSNetwork Network;
     memcpy(&Network, arg, sizeof(struct Network));
-    
+
     char* str_NodeName     = Network.nodeName;
-    char* ip = Network.ip; 
+    char* ip = Network.ip;
     char* mac = Network.mac;
     if ((!xmlStrcmp(_Cur->name, (const xmlChar *) str_NodeName))) {
         _Cur = _Cur->xmlChildrenNode;
@@ -40,7 +41,7 @@ int set_Network(void *arg){
                 xmlFree(key);
                 //######set
                 xmlNodeSetContent(_Cur, BAD_CAST ip);
-                
+
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 printf("after : ip: %s\n", key);
                 xmlFree(key);
@@ -52,7 +53,7 @@ int set_Network(void *arg){
                 printf("before: mac: %s\n", key);
                 xmlFree(key);                //######set
                 xmlNodeSetContent(_Cur, BAD_CAST mac);
-                
+
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 printf("after : mac: %s\n", key);
                 xmlFree(key);
@@ -70,18 +71,18 @@ int set_Network(void *arg){
  *      0, success
  *      -1, err
  */
-int set_RfidModule(void *arg){
-    if(NULL == arg){
+int set_RfidModule(void *arg) {
+    if(NULL == arg) {
         fprintf(stderr, "arg is null, return -1\n");
         return -1;
     }
     xmlChar *key;
-    
+
     tSRfidModule RfidModule;
     memcpy(&RfidModule, arg, sizeof(struct RfidModule));
-    
+
     char* str_NodeName     = RfidModule.nodeName;
-    char* str_IoReset_Flag = RfidModule.str_IoReset_Flag; 
+    char* str_IoReset_Flag = RfidModule.str_IoReset_Flag;
     char* str_IoReset_Time = RfidModule.str_IoReset_Time;
     if ((!xmlStrcmp(_Cur->name, (const xmlChar *) str_NodeName))) {
         _Cur = _Cur->xmlChildrenNode;
@@ -92,7 +93,7 @@ int set_RfidModule(void *arg){
                 printf("before: IoReset_Flag: %s\n", key);
                 xmlFree(key);                //######set
                 xmlNodeSetContent(_Cur, BAD_CAST str_IoReset_Flag);
-                
+
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 printf("after : IoReset_Flag: %s\n", key);
                 xmlFree(key);
@@ -104,7 +105,7 @@ int set_RfidModule(void *arg){
                 printf("before: IoReset_Time: %s\n", key);
                 xmlFree(key);                //######set
                 xmlNodeSetContent(_Cur, BAD_CAST str_IoReset_Time);
-                
+
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 printf("after : IoReset_Time: %s\n", key);
                 xmlFree(key);
@@ -118,15 +119,14 @@ int set_RfidModule(void *arg){
 }
 
 /*
- * @brief: 
+ * @brief:
  * @param doc:
  * @param cur:
  * @param str_IoReset_Flag: value to set
  * @param str_IoReset_Time: value to set
  */
-static int set_SysConf808Child(xmlDocPtr doc, xmlNodePtr cur, int(*setFunc)(void *), void *arg)
-{
-    if(NULL == doc || NULL == cur || NULL == setFunc){
+static int set_SysConf808Child(xmlDocPtr doc, xmlNodePtr cur, int(*setFunc)(void *), void *arg) {
+    if(NULL == doc || NULL == cur || NULL == setFunc) {
         printf("doc||cur is null , return -1");
         return -1;
     }
@@ -134,59 +134,58 @@ static int set_SysConf808Child(xmlDocPtr doc, xmlNodePtr cur, int(*setFunc)(void
     _Doc = doc;
     _Cur = cur;
     int ret = setFunc(arg);
-    
+
     return ret;
 }
 
 
 
-int set_SysConf808(const char *file_name, int(*setFunc)(void *), void *arg)
-{
+int set_SysConf808(const char *file_name, int(*setFunc)(void *), void *arg) {
     assert(file_name);
-    
+
     xmlDocPtr doc;   //xml整个文档的树形结构
     xmlNodePtr cur;  //xml节点
-    xmlChar *id;     //phone id
-    
+    //xmlChar *id;     //phone id
+
     //获取树形结构
     doc = xmlParseFile(file_name);
     if (doc == NULL) {
         fprintf(stderr, "Failed to parse xml file:%s\n", file_name);
         goto FAILED;
     }
-    
+
     //获取根节点
     cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
         fprintf(stderr, "Root is empty.\n");
         goto FAILED;
     }
-    
+
     if ((xmlStrcmp(cur->name, (const xmlChar *)"SysConf808"))) {
         fprintf(stderr, "The root is not SysConf808.\n");
         goto FAILED;
     }
-    
+
     //遍历处理根节点的每一个子节点
     cur = cur->xmlChildrenNode;
     while (cur != NULL) {
         /*###### TODO:*/
         int ret = set_SysConf808Child(doc, cur, setFunc, arg);
-        if (ret < 0){
+        if (ret < 0) {
             printf("err set_RfidModule\n");
             goto FAILED;
         }
         cur = cur->next;
         printf("\n");
     }
-    
+
     /*
      * save xml file*/
     xmlSaveFormatFileEnc(DEFAULT_XML_FILE, doc, "UTF-8", 1);
     xmlFreeDoc(doc);
     xmlCleanupParser();
     return 0;
-    
+
 FAILED:
     if (doc) {
         xmlFreeDoc(doc);
@@ -195,33 +194,32 @@ FAILED:
     return -1;
 }
 
-int main(int argc, char*argv[])
-{
+#ifdef MAIN_RELEASE
+int main(int argc, char*argv[]) {
     char *xml_file = DEFAULT_XML_FILE;
-    
+
     if (argc == 2) {
         xml_file = argv[1];
     }
-   
+
     tSRfidModule RfidModule;
-    RfidModule.nodeName= "RfidModule";
+    RfidModule.nodeName = "RfidModule";
     RfidModule.str_IoReset_Flag = "yes";
     RfidModule.str_IoReset_Time = "2000";
-    if (set_SysConf808(xml_file, set_RfidModule, &RfidModule) != 0)
-    {
+    if (set_SysConf808(xml_file, set_RfidModule, &RfidModule) != 0) {
         fprintf(stderr, "Failed to set_RfidModule node.\n");
         return -1;
     }
-    
+
     tSNetwork Network;
-    Network.nodeName= "Network";
-    Network.ip= "192.168.1.1";
-    Network.mac= "ff:ee:dd:aa";
-    if (set_SysConf808(xml_file, set_Network, &Network) != 0)
-    {
+    Network.nodeName = "Network";
+    Network.ip = "192.168.1.1";
+    Network.mac = "ff:ee:dd:aa";
+    if (set_SysConf808(xml_file, set_Network, &Network) != 0) {
         fprintf(stderr, "Failed to set_Network node.\n");
         return -1;
     }
-    
+
     return 0;
 }
+#endif

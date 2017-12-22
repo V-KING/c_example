@@ -23,175 +23,170 @@
 
 //电话通讯录结构体
 typedef struct phone_t {
-	int id;              //编号
-	char name[NAME_STR_LEN];     //姓名
-	char tel[TEL_STR_LEN];       //电话
+    int id;              //编号
+    char name[NAME_STR_LEN];     //姓名
+    char tel[TEL_STR_LEN];       //电话
 // 	char address[ADDR_STR_LEN];  //地址
-}phone;
+} phone;
 
 //设置通讯录项
-static void set_phone_item(phone *phone_item)
-{
-	assert(phone_item);
+static void set_RfidModule_item(phone *phone_item) {
+    assert(phone_item);
 
-	phone_item->id = 10;
-	snprintf(phone_item->name, NAME_STR_LEN, "%s", "1");
-	snprintf(phone_item->tel, TEL_STR_LEN, "%s", "2345");
+    phone_item->id = 10;
+    snprintf(phone_item->name, NAME_STR_LEN, "%s", "1");
+    snprintf(phone_item->tel, TEL_STR_LEN, "%s", "90");
 }
 
 //创建phone节点
-static xmlNodePtr create_phone_node(const phone *phone_item)
-{
-	assert(phone_item);
+static xmlNodePtr create_RfidModule_node(const phone *phone_item) {
+    assert(phone_item);
 
-	char id[ID_STR_LEN] = {0};
-	xmlNodePtr phone_node = NULL;
+    char id[ID_STR_LEN] = {0};
+    xmlNodePtr phone_node = NULL;
 
-	phone_node = xmlNewNode(NULL, BAD_CAST"RfidModule");
-	if (phone_node == NULL) {
-		fprintf(stderr, "Failed to create new node.\n");
-		return NULL;
-	}
-	//设置属性
-	snprintf(id, ID_STR_LEN, "%d", phone_item->id);
-	//xmlNewProp(phone_node, BAD_CAST"id", (xmlChar*)id);
+    phone_node = xmlNewNode(NULL, BAD_CAST"RfidModule");
+    if (phone_node == NULL) {
+        fprintf(stderr, "Failed to create new node.\n");
+        return NULL;
+    }
+    //设置属性
+    snprintf(id, ID_STR_LEN, "%d", phone_item->id);
+    //xmlNewProp(phone_node, BAD_CAST"id", (xmlChar*)id);
 
-	xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Flag", (xmlChar *)phone_item->name);
-	xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Time", (xmlChar *)phone_item->tel);
+    xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Flag", (xmlChar *)phone_item->name);
+    xmlNewChild(phone_node, NULL, BAD_CAST"IoReset_Time", (xmlChar *)phone_item->tel);
 
-	return phone_node;
+    return phone_node;
 }
 
 //向根节点中添加一个phone节点
-static int add_phone_node_to_root(xmlNodePtr root_node)
-{
-	xmlNodePtr phone_node = NULL;
-	phone *phone_item = NULL;
+static int add_RfidModule_to_SysConf808(xmlNodePtr root_node) {
+    xmlNodePtr phone_node = NULL;
+    phone *phone_item = NULL;
 
-	//创建一个新的phone
-	phone_item = (phone *)malloc(sizeof(phone));
-	if (phone_item == NULL) {
-		fprintf(stderr, "Failed to malloc memory.\n");
-		return -1;
-	}
-	set_phone_item(phone_item);
+    //创建一个新的phone
+    phone_item = (phone *)malloc(sizeof(phone));
+    if (phone_item == NULL) {
+        fprintf(stderr, "Failed to malloc memory.\n");
+        return -1;
+    }
+    set_RfidModule_item(phone_item);
 
-	//创建一个phone节点
-	phone_node = create_phone_node(phone_item); 
-	if (phone_node == NULL) {
-		fprintf(stderr, "Failed to create phone node.\n");
-		goto FAILED;
-	}
-	//根节点添加一个子节点
-	xmlAddChild(root_node, phone_node);
-	free(phone_item);
+    //创建一个phone节点
+    phone_node = create_RfidModule_node(phone_item);
+    if (phone_node == NULL) {
+        fprintf(stderr, "Failed to create phone node.\n");
+        goto FAILED;
+    }
+    //根节点添加一个子节点
+    xmlAddChild(root_node, phone_node);
+    free(phone_item);
 
-	return 0;
+    return 0;
 FAILED:
-	if (phone_item){
-		free(phone_item);
-	}
-	return -1;
+    if (phone_item) {
+        free(phone_item);
+    }
+    return -1;
 }
 
 //创建phone_books
-static int create_phone_books(const char *phone_book_file)
-{
-	assert(phone_book_file);
+static int create_SysConf808(const char *phone_book_file) {
+    assert(phone_book_file);
 
-	xmlDocPtr doc = NULL;
-	xmlNodePtr root_node = NULL;
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root_node = NULL;
 
-	//创建一个xml 文档
-	doc = xmlNewDoc(BAD_CAST"1.0");
-	if (doc == NULL) {
-		fprintf(stderr, "Failed to new doc.\n");
-		return -1;
-	}
+    //创建一个xml 文档
+    doc = xmlNewDoc(BAD_CAST"1.0");
+    if (doc == NULL) {
+        fprintf(stderr, "Failed to new doc.\n");
+        return -1;
+    }
 
-	//创建根节点
-	root_node = xmlNewNode(NULL, BAD_CAST"SysConf808");
-	if (root_node == NULL) {
-		fprintf(stderr, "Failed to new root node.\n");
-		goto FAILED;
-	}
-	//将根节点添加到文档中
-	xmlDocSetRootElement(doc, root_node);
+    //创建根节点
+    root_node = xmlNewNode(NULL, BAD_CAST"SysConf808");
+    if (root_node == NULL) {
+        fprintf(stderr, "Failed to new root node.\n");
+        goto FAILED;
+    }
+    //将根节点添加到文档中
+    xmlDocSetRootElement(doc, root_node);
 
-	if (add_phone_node_to_root(root_node) != 0) {
-		fprintf(stderr, "Failed to add a new phone node.\n");
-		goto FAILED;
-	}
-	//将文档保存到文件中，按照utf-8编码格式保存
-	xmlSaveFormatFileEnc(phone_book_file, doc, "UTF-8", 1);
-	//xmlSaveFile("test.xml", doc);
-	xmlFreeDoc(doc);
+    if (add_RfidModule_to_SysConf808(root_node) != 0) {
+        fprintf(stderr, "Failed to add a new phone node.\n");
+        goto FAILED;
+    }
+    //将文档保存到文件中，按照utf-8编码格式保存
+    xmlSaveFormatFileEnc(phone_book_file, doc, "UTF-8", 1);
+    //xmlSaveFile("test.xml", doc);
+    xmlFreeDoc(doc);
 
-	return 0; 
+    return 0;
 FAILED:
-	if (doc) {
-		xmlFreeDoc(doc);
-	}
+    if (doc) {
+        xmlFreeDoc(doc);
+    }
 
-	return -1;
+    return -1;
 }
 
-static int add_phone_node(const char *phone_book_file)
-{
-	assert(phone_book_file);
+static int add_RfidModule(const char *phone_book_file) {
+    assert(phone_book_file);
 
-	xmlDocPtr doc = NULL;
-	xmlNodePtr root_node = NULL;
-	xmlNodePtr phone_node = NULL;
-	phone *phone_item = NULL;
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root_node = NULL;
+    //xmlNodePtr phone_node = NULL;
+    //phone *phone_item = NULL;
 
-	doc = xmlParseFile(phone_book_file);
-	if (doc == NULL) {
-		fprintf(stderr, "Failed to parser xml file:%s\n", phone_book_file);
-		return -1;
-	}
+    doc = xmlParseFile(phone_book_file);
+    if (doc == NULL) {
+        fprintf(stderr, "Failed to parser xml file:%s\n", phone_book_file);
+        return -1;
+    }
 
-	root_node = xmlDocGetRootElement(doc);
-	if (root_node == NULL) {
-		fprintf(stderr, "Failed to get root node.\n");
-		goto FAILED;
-	}
+    root_node = xmlDocGetRootElement(doc);
+    if (root_node == NULL) {
+        fprintf(stderr, "Failed to get root node.\n");
+        goto FAILED;
+    }
 
-	if (add_phone_node_to_root(root_node) != 0) {
-		fprintf(stderr, "Failed to add a new phone node.\n");
-		goto FAILED;
-	}
-	//将文档保存到文件中，按照utf-8编码格式保存
-	xmlSaveFormatFileEnc(phone_book_file, doc, "UTF-8", 1);
-	xmlFreeDoc(doc);
+    if (add_RfidModule_to_SysConf808(root_node) != 0) {
+        fprintf(stderr, "Failed to add a new phone node.\n");
+        goto FAILED;
+    }
+    //将文档保存到文件中，按照utf-8编码格式保存
+    xmlSaveFormatFileEnc(phone_book_file, doc, "UTF-8", 1);
+    xmlFreeDoc(doc);
     xmlCleanupParser();
 
-	return 0;
+    return 0;
 FAILED:
-	if (doc) {
-		xmlFreeDoc(doc);
-	}
-	xmlCleanupParser();
+    if (doc) {
+        xmlFreeDoc(doc);
+    }
+    xmlCleanupParser();
 
-	return -1;
+    return -1;
 }
 
-int main(int argc, char *argv[])
-{
-	char *phone_book_file = PHONE_BOOK_FILE;
+#ifdef MAIN_RELEASE
+int main(int argc, char *argv[]) {
+    char *phone_book_file = PHONE_BOOK_FILE;
 
-	if (argc == 2) {
-		phone_book_file = argv[1];
-	}
+    if (argc == 2) {
+        phone_book_file = argv[1];
+    }
 
-	if (access(phone_book_file, F_OK) == 0) {
-		//文件存在，添加一个新的phone节点
-		add_phone_node(phone_book_file);
-	}
-	else {
-		//文件不存在，创建一个信息的phone book
-		create_phone_books(phone_book_file);
-	}
+    if (access(phone_book_file, F_OK) == 0) {
+        //文件存在，添加一个新的phone节点
+        add_RfidModule(phone_book_file);
+    } else {
+        //文件不存在，创建一个信息的phone book
+        create_SysConf808(phone_book_file);
+    }
 
-	return 0;
+    return 0;
 }
+#endif

@@ -1,7 +1,6 @@
 *~
 *.swp
 *.kdev4
-*.bak
 clean.sh
 libthread_db-1.0.so
 *.bp
