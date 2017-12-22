@@ -3,12 +3,12 @@
 #include <assert.h>
 #include <memory.h>
 
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/parser.h>
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
+#include "libxml/xmlstring.h"
 #include "SysConf808.h"
 
 
-#define DEFAULT_XML_FILE "phone_book.xml"
 static xmlDocPtr _Doc;
 static xmlNodePtr _Cur;
 
@@ -26,7 +26,7 @@ int set_Network(void *arg) {
     xmlChar *key;
 
     tSNetwork Network;
-    memcpy(&Network, arg, sizeof(struct Network));
+    memcpy(&Network, arg, sizeof(tSNetwork));
 
     char* str_NodeName     = Network.nodeName;
     char* ip = Network.ip;
@@ -79,7 +79,7 @@ int set_RfidModule(void *arg) {
     xmlChar *key;
 
     tSRfidModule RfidModule;
-    memcpy(&RfidModule, arg, sizeof(struct RfidModule));
+    memcpy(&RfidModule, arg, sizeof(tSRfidModule));
 
     char* str_NodeName     = RfidModule.nodeName;
     char* str_IoReset_Flag = RfidModule.str_IoReset_Flag;
@@ -203,18 +203,24 @@ int main(int argc, char*argv[]) {
     }
 
     tSRfidModule RfidModule;
-    RfidModule.nodeName = "RfidModule";
-    RfidModule.str_IoReset_Flag = "yes";
-    RfidModule.str_IoReset_Time = "2000";
+    //RfidModule.nodeName = "RfidModule";
+    //RfidModule.str_IoReset_Flag = "yes";
+    //RfidModule.str_IoReset_Time = "2000";
+    memcpy(RfidModule.nodeName, "RfidModule", NAME_STR_LEN);
+    memcpy(RfidModule.str_IoReset_Flag, "yes", NAME_STR_LEN);
+    memcpy(RfidModule.str_IoReset_Time, "2000", NAME_STR_LEN);
     if (set_SysConf808(xml_file, set_RfidModule, &RfidModule) != 0) {
         fprintf(stderr, "Failed to set_RfidModule node.\n");
         return -1;
     }
-
+    
     tSNetwork Network;
-    Network.nodeName = "Network";
-    Network.ip = "192.168.1.1";
-    Network.mac = "ff:ee:dd:aa";
+//     Network.nodeName = "Network";
+//     Network.ip = "192.168.1.1";
+//     Network.mac = "ff:ee:dd:aa";
+    memcpy(Network.nodeName, "RfidModule", NAME_STR_LEN);
+    memcpy(Network.ip, "192.168.1.1", NAME_STR_LEN);
+    memcpy(Network.mac, "ff:ee:dd:aa", NAME_STR_LEN);
     if (set_SysConf808(xml_file, set_Network, &Network) != 0) {
         fprintf(stderr, "Failed to set_Network node.\n");
         return -1;

@@ -1,6 +1,3 @@
-# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017
-# Late Lee(latelee@latelee.com) from http://www.latelee.org
-# 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
 #
 # note: 
@@ -13,12 +10,6 @@
 #        $ make CROSS_COMPILE=arm-arago-linux-gnueabi-  # cross compile for ARM, etc.
 #        $ make debug=y # debug
 #        $ make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
-#
-# log
-#       2013-05-14 sth about debug...
-#       2016-02-29 sth for c/c++ multi diretory
-#       2017-04-17 -s for .a/.so if no debug
-#       2017-05-05 Add V for verbose ouput
 ###############################################################################
 
 # !!!=== cross compile...
@@ -114,7 +105,7 @@ endif
 
 ###############################################################################
 
-all: $(target)
+all: $(target) move
 
 $(target): $(OBJ)
 
@@ -145,7 +136,12 @@ clean:
 	$(Q)$(RM) $(target) $(objDir)
 	$(Q)find . -iname '*.o' -o -iname -o -iname '*.d' -or -name "*~" | xargs rm -f
 
+# for 808
+move:
+	cp perseXMLdoc.c setXMLdoc.c createXMLfile.c *.h ~/lirp_808/SysConf808
+	
 style:
 	find ./ -name "*.h" -or -name "*.c"|egrep -v 'xxx' \
 	| xargs astyle -p --suffix=none --style=java
-.PHONY: all clean style
+	
+.PHONY: all clean style move

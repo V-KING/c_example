@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/parser.h>
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
+#include "libxml/xmlstring.h"
 #include "SysConf808.h"
 
 
@@ -29,18 +30,18 @@
 #define print_pAddr(p1, p2)
 #endif
 
-#define DEFAULT_XML_FILE "phone_book.xml"
+
 
 static xmlDocPtr _Doc;
 static volatile   xmlNodePtr  _Cur;
 
 
-static char *malloc_str(const unsigned char * const pValue) {
-    int len = strlen(pValue) + 1;
-    unsigned char *p = (unsigned char *)malloc(len);
-    memcpy(p, pValue, len);
-    return p;
-}
+// static char *malloc_str(const unsigned char * const pValue) {
+//     int len = strlen(pValue) + 1;
+//     unsigned char *p = (unsigned char *)malloc(len);
+//     memcpy(p, pValue, len);
+//     return p;
+// }
 
 tSRfidModule *get_RfidModule() {
     print_y("#Begin..\n");
@@ -54,7 +55,8 @@ tSRfidModule *get_RfidModule() {
             if ((!xmlStrcmp(_Cur->name, (const xmlChar *)"IoReset_Flag"))) {
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 print_dbg("IoReset_Flag: %s\n", key);
-                pRfidModule->str_IoReset_Flag = malloc_str((char *)key);
+                //pRfidModule->str_IoReset_Flag = malloc_str((char *)key);
+                memcpy(pRfidModule->str_IoReset_Flag, key, NAME_STR_LEN);
                 print_dbg("IoReset_Flag: %s\n", pRfidModule->str_IoReset_Flag);
                 xmlFree(key);
             }
@@ -62,7 +64,8 @@ tSRfidModule *get_RfidModule() {
             if ((!xmlStrcmp(_Cur->name, (const xmlChar *)"IoReset_Time"))) {
                 key = xmlNodeListGetString(_Doc, _Cur->xmlChildrenNode, 1);
                 print_dbg("IoReset_Time: %s\n", key);
-                pRfidModule->str_IoReset_Time = malloc_str((char *)key);
+                //pRfidModule->str_IoReset_Time = malloc_str((char *)key);
+                memcpy(pRfidModule->str_IoReset_Time, key, NAME_STR_LEN);
                 print_dbg("IoReset_Flag: %s\n", pRfidModule->str_IoReset_Time);
                 xmlFree(key);
             }

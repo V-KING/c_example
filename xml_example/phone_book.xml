@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SysConf808>
-    <RfidModule>
-        <IoReset_Flag>yes</IoReset_Flag>
+<RfidModule>
+    <IoReset_Flag>yes</IoReset_Flag>
         <IoReset_Time>2000</IoReset_Time>
     </RfidModule>
-    <RfidModule>
-        <IoReset_Flag>yes</IoReset_Flag>
-        <IoReset_Time>2000</IoReset_Time>
-    </RfidModule>
-    <RfidModule>
-        <IoReset_Flag>yes</IoReset_Flag>
-        <IoReset_Time>2000</IoReset_Time>
-    </RfidModule>
-</SysConf808>
+<RfidModule><IoReset_Flag>yes</IoReset_Flag><IoReset_Time>2000</IoReset_Time></RfidModule></SysConf808>

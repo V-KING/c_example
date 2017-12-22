@@ -1,6 +1,10 @@
 #ifndef _SysConf808_h
 #define _SysConf808_h
 
+#define DEFAULT_XML_FILE "phone_book.xml"
+
+#define NAME_STR_LEN         32
+
 /****start <RfidModule>**********************
 <SysConf808>
     <RfidModule>
@@ -9,13 +13,14 @@
     </RfidModule>
 </SysConf808>
 */
-typedef struct RfidModule {
+typedef struct _RfidModule{
     /* Must have this menber*/
-    char *nodeName;
+    char nodeName[NAME_STR_LEN];
     /* below according the need to add and define*/
-    char* str_IoReset_Flag;
-    char* str_IoReset_Time;
-} tSRfidModule;
+    char str_IoReset_Flag[NAME_STR_LEN];
+    char str_IoReset_Time[NAME_STR_LEN];
+} RfidModule;
+typedef RfidModule tSRfidModule;
 /****end  <RfidModule>**********************/
 
 
@@ -27,13 +32,14 @@ typedef struct RfidModule {
     </Network>
 </SysConf808>
 */
-typedef struct Network {
+typedef struct _Network {
     /* Must have this menber*/
-    char *nodeName;
+    char nodeName[NAME_STR_LEN];
     /* below according the need to add and define*/
-    char* ip;
-    char* mac;
-} tSNetwork;
+    char ip[NAME_STR_LEN];
+    char mac[NAME_STR_LEN];
+} Network;
+typedef Network tSNetwork;
 /****end  <Network>**********************/
 
 
