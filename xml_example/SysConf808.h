@@ -1,6 +1,10 @@
 #ifndef _SysConf808_h
 #define _SysConf808_h
 
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
+#include "libxml/xmlstring.h"
+
 #define DEFAULT_XML_FILE "phone_book.xml"
 
 #define NAME_STR_LEN         32
@@ -41,6 +45,19 @@ typedef struct _Network {
 } Network;
 typedef Network tSNetwork;
 /****end  <Network>**********************/
+
+/* create or add*/
+extern void set_RfidModule_item(RfidModule *RfidModule_item) ;
+extern int add_RfidModule_to_SysConf808(xmlNodePtr root_node) ;
+extern int create_SysConf808(const char *RfidModule_book_file) ;
+extern int add_Childs_to_SysConf808(const char *RfidModule_book_file) ;
+/* get*/
+extern tSRfidModule *get_RfidModule() ;
+extern void *getSysConf808(const char *file_name, void *(*pfGetSysConf808Child)()) ;
+/* set or modify*/
+extern int set_Network(void *arg) ;
+extern int set_RfidModule(void *arg) ;
+extern int set_SysConf808(const char *file_name, int(*setFunc)(void *), void *arg) ;
 
 
 #endif
