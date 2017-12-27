@@ -1,0 +1,31 @@
+[submodule "C-Thread-Pool"]
+	path = C-Thread-Pool
+	url = https://github.com/Pithikos/C-Thread-Pool.git
+
+
+[submodule "FTP"]
+	path = FTP
+	url = https://github.com/rovinbhandari/FTP.git
+
+[submodule "libxml-examples"]
+	path = libxml-examples
+	url = https://github.com/yarox/libxml-examples.git
+
+[submodule "mproxy"]
+	path = mproxy
+	url=https://github.com/snail007/mproxy.git
+
+[submodule "ntp"]
+	path = ntp/ntp
+	url=https://github.com/jagd/ntp.git
+
+[submodule "send_ARM_firmware"]
+	path = send_ARM_firmware 
+	url= ./send_ARM_firmware
+
+[submodule "sqlite_tutorial"]
+	path = sqlite_tutorial
+	url= https://github.com/KuanYuChen/sqlite_tutorial.git
+[submodule "libev"]
+	path = libev
+	url = https://github.com/V-KING/libev.git

@@ -10,6 +10,7 @@ getAllNodeName
 perseXMLdoc
 setXMLdoc
 xmlWrite
+crc16_calculate
 
 
 # Object files

@@ -115,6 +115,10 @@ int main(int argc, const char *argv[])
 	value = 0;
 	ret = CRC16_CalculateBuf(test, sizeof(test)/sizeof(test[0]));
 	printf("crc = %x\n", ret);
+    
+    unsigned char test2[]={0x00, 0x0d, 0x08, 0xf8, 0x00, 0x01, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    ret = CRC16_CalculateBuf(test2, sizeof(test2)/sizeof(test2[0]));
+    printf("crc = %x\n", ret);
 
 	return 0;
 }
