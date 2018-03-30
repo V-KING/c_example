@@ -29,3 +29,6 @@
 [submodule "libev"]
 	path = libev
 	url = https://github.com/V-KING/libev.git
+[submodule "lw_oopc"]
+	path = lw_oopc
+	url = https://github.com/Akagi201/lw_oopc.git
