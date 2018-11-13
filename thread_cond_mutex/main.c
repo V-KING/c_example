@@ -7,8 +7,8 @@
 #include <stdio.h>
 
 #define CONSUMER_COUNT 1        /* 1个消费者线程 */
-#define PRODUCER_COUNT 3        /* 3个生产者线程 */
-#define BUFFERSIZE 10
+#define PRODUCER_COUNT 1        /* 3个生产者线程 */
+#define BUFFERSIZE 1            /* 10 byte     */
 
 int g_buffer[BUFFERSIZE];
 
@@ -61,7 +61,7 @@ void* consumer(void* arg)
         while (nready == 0)
             pthread_cond_wait(&not_empty.cond, &not_empty.mutex);
         printf("thread %d 开始消费产品 %d\n", num, g_buffer[out]);
-        sleep(4);       /* 消费一个产品需要4秒 */
+//         sleep(4);       /* 消费一个产品需要4秒 */
         g_buffer[out] = -1;
         printf("消费完毕\n");
         --nready;
@@ -106,7 +106,7 @@ void* producer(void* arg)
             pthread_cond_wait(&not_full.cond, &not_full.mutex);
         g_buffer[in]++;
         printf("thread %d 开始生产产品 %d\n", num, g_buffer[in]);
-        sleep(2);       /* 生产一个产品需要2秒 */
+//         sleep(2);       /* 生产一个产品需要2秒 */
         printf("生产完毕\n");
         ++nready;
         in = (in + 1) % BUFFERSIZE;

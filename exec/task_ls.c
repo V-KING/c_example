@@ -18,6 +18,13 @@ int main(int argc, const char *argv[])
 		}
 		exit(0);
 	}
-
+	
+    if (fork() == 0)
+    {
+        if(execl("/bin/ls","ls","-l",NULL)<0)
+        {       
+            perror("execl error!\n");
+        }
+    }
 	return 0;
 }

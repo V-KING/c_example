@@ -1,0 +1,2 @@
+all:
+	gcc regexp.c
