@@ -13,11 +13,20 @@
 #include "tcp_net.h"
 
 
-
 SelectServer::SelectServer(int port ) {
+    this->port = port;
+}
+void  SelectServer::setIrpMsgDo(void(*IrpMsgDo)(int fd, unsigned char *buf, int len)){
+    this->IrpMsgDo = IrpMsgDo;
+}
+void  SelectServer::setMaxConnetion(int MaxClient){
+    this->MaxClient = MaxClient;
+}
+
+void SelectServer::run() {
     int ret;
     int i, maxi, maxfd, listenfd, connfd, sockfd;
-    int nready, client[CLIENTS_SIZE];
+    int nready, client[MaxClient];
     ssize_t n;
     fd_set      rset, allset;
     char    buf[MAXLINE];
@@ -29,7 +38,7 @@ SelectServer::SelectServer(int port ) {
 
     maxfd = listenfd;           /* initialize */
     maxi = -1;                  /* index into client[] array */
-    for (i = 0; i < CLIENTS_SIZE; i++)
+    for (i = 0; i < MaxClient; i++)
         client[i] = -1;         /* -1 indicates available entry */
     FD_ZERO(&allset);
     FD_SET(listenfd, &allset);
@@ -41,16 +50,16 @@ SelectServer::SelectServer(int port ) {
 
         if (FD_ISSET(listenfd, &rset)) {    /* new client connection */
             connfd = getClientSockfd(listenfd);
-            if (count_client >= CLIENTS_SIZE) {
-                print_err("too many clients, count_client = %d, CLIENTS_SIZE = %d\n", count_client, CLIENTS_SIZE);
+            if (count_client >= MaxClient) {
+                print_err("too many clients, count_client = %d, MaxClient = %d\n", count_client, MaxClient);
                 close(connfd);
                 continue;
             }
-            for (i = 0; i < CLIENTS_SIZE; i++) {
+            for (i = 0; i < MaxClient; i++) {
                 if (client[i] < 0) {
-                    print_dbg("client[%d] = %d\n", i, connfd);
                     client[i] = connfd; /* save descriptor */
                     count_client++;
+                    print_dbg("total_clients = %d,client[%d] = %d\n", count_client, i, connfd);
                     break;
                 }
             }
@@ -80,7 +89,14 @@ SelectServer::SelectServer(int port ) {
                 } else if (n < 0) {
                     print_err("%s\n", strerror(errno));
                 } else {
-                    write(sockfd, buf, n);
+                    //write(sockfd, buf, n);
+                    /* function pointer do*/
+                    if(IrpMsgDo != NULL){
+                        print_dbg("IrpMsgDo ...\n");
+                        IrpMsgDo(sockfd, (unsigned char *)buf, n);
+                    }else{
+                        print_err("please 'setIrpMsgDo()' to a function\n");
+                    }
                 }
                 if (--nready <= 0)
                     break;              /* no more readable descriptors */
@@ -88,6 +104,5 @@ SelectServer::SelectServer(int port ) {
         }
     }
 }
-
 
 

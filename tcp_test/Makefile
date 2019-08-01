@@ -46,7 +46,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(notdi
 
 all:$(TARGET) move
 $(TARGET): $(OBJS)
-	$(CC) $^ $(LNK_FLAGS) -o $@
+	$(CXX) $^ $(LNK_FLAGS) -o $@
 
 #编译之前要创建OBJ目录，确保目录存在
 Q=@
