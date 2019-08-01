@@ -53,21 +53,23 @@ Q=@
 NQ=echo
 $(OBJ_DIR)/%.o:%.c
 	$(Q)if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi;
-	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
+	@$(NQ) "Compiling C: " $(addsuffix .c, $(basename $(notdir $@)))
 	$(Q)$(CC) -c $(CC_FLAGS) -o $@ $<
 $(OBJ_DIR)/%.o:%.cpp
 	$(Q)if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi;
-	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
+	@$(NQ) "Compiling CXX: " $(addsuffix .cpp, $(basename $(notdir $@)))
 	$(Q)$(CXX) -c $(CXX_FLAGS) -o $@ $<
 
 test:
 	echo $(SOURCES)
 	echo $(LNK_FLAGS)
+	echo $(INC_DIR)
+	echo $(CXX_FLAGS)
 valgrind:
 	valgrind --log-file=./valgrind.log --tool=memcheck --leak-check=full --show-reachable=yes  --track-origins=yes ./$(TARGET)
 style:
 	find ./ -name "*.h" -or -name "*.c" -or -name "*.cpp"|egrep -v 'xxx' \
-	| xargs astyle -p --suffix=none --style=java --max-instatement-indent=120
+	| xargs astyle -p --suffix=none --style=java --convert-tabs --max-instatement-indent=120
 release: 
 	make clean
 	@make all ver=release
@@ -83,4 +85,4 @@ distclean:
 #前面加-表示忽略错误
 .PHONY : clean
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	-rm -rf $(BUILD_DIR) $(TARGET)
