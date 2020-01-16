@@ -38,6 +38,15 @@ void SetSocketOptParam(int fd) {
     if(setsockopt(fd, SOL_TCP, TCP_USER_TIMEOUT, &yes, sizeof(yes))==-1){
         fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
     }
+                /* keepAlive */
+//                 int keepAlive = 1; // 开启keepalive属性
+//                 int keepIdle = 5; // 如该连接在60秒内没有任何数据往来,则进行探测 
+//                 int keepInterval = 1; // 探测时发包的时间间隔为5 秒
+//                 int keepCount = 2; // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.
+//                 setsockopt(connectfd, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepAlive, sizeof(keepAlive));
+//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPIDLE, (void*)&keepIdle, sizeof(keepIdle));
+//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
+//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
 }
 int main(){
     int listenfd,connectfd;
@@ -83,15 +92,6 @@ int main(){
 
             
             if((childpid = fork()) == 0){   
-                /* keepAlive */
-//                 int keepAlive = 1; // 开启keepalive属性
-//                 int keepIdle = 5; // 如该连接在60秒内没有任何数据往来,则进行探测 
-//                 int keepInterval = 1; // 探测时发包的时间间隔为5 秒
-//                 int keepCount = 2; // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.
-//                 setsockopt(connectfd, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepAlive, sizeof(keepAlive));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPIDLE, (void*)&keepIdle, sizeof(keepIdle));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
                 SetSocketOptParam(connectfd);
                 close(listenfd);
                 printf("client from %s\n",inet_ntoa(client.sin_addr));

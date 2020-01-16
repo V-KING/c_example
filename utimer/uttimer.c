@@ -5,12 +5,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <errno.h>
-
-//#include "../boards2/rfid_types.h"
-//#include "../boards2/readeropt.h"
-//#include "invglog.h"
 #include "uttimer.h"
-
 
 unsigned int cpu_diff_us( struct timeval *tv )
 {

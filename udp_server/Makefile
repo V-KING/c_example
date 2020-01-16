@@ -1,7 +1,7 @@
 # AR          = /home/fangy/arm-linux-gcc-3.4.1/usr/local/arm/3.4.1/bin/arm-linux-ar
 # STRIP       = /home/fangy/arm-linux-gcc-3.4.1/usr/local/arm/3.4.1/bin/arm-linux-strip
 #CC          = /home/fangy/arm-linux-gcc-3.4.1/usr/local/arm/3.4.1/bin/arm-linux-gcc
-CC          = gcc
+CC          = gcc -g
 
 CFLAGS = -lpthread
 
