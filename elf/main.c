@@ -70,13 +70,16 @@ $ objdump -sj .version hello
 extern char _binary_version_start;
 extern char _binary_version_end;
 extern char _binary_version_size;
-
+char *myversion="@@@111@@@";
 int main(int argc, const char *argv[])
 {
     unsigned long s = (unsigned long)&_binary_version_size;
     printf("_binary_version_start :0x%lx\n",(unsigned long)&_binary_version_start);
     printf("_binary_version_end   :0x%lx\n",(unsigned long)&_binary_version_end);
     printf("_binary_version_size  :%ld\n",(unsigned long)&_binary_version_size);
+    
+    
+    printf("vkvkvkvkvkvkvkvkvkvk\n");
     print_dbg("version = %s\n", (char *)&_binary_version_start);
     print_buf(&_binary_version_start, s);
     

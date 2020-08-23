@@ -4,6 +4,21 @@
 在elf中写入可识别的版本信息有两种方式
 1. 使用objcopy. (see Makefile.main)
 2. 使用-Wl,--defsym,VERISON_1_0=0. (see Makefile.test)
+3. 添加section
+```shell
+$ echo 'int main() { puts ("Hello world"); }' | gcc -x c - -c -o hello.o
+
+$ echo "this is my special data" >version
+
+$ objcopy --add-section .version=version --set-section-flags .version=noload,readonly hello.o hello2.o
+
+$ gcc hello2.o -o hello
+
+$ ./hello
+Hello world
+
+$ objdump -sj .version hello
+```
 
 在ubuntu的32位系统撒花姑娘上测试通过，证明可用。
 在二进制文件中有相应的版本信息的字符串.
