@@ -17,36 +17,52 @@
 #define BACK_LOG 10
 void SetSocketOptParam(int fd) {
     int yes;
-    //设置连接超时检测------------------------------------------------------------------
-    yes = 1;//开启keepalive属性
-    if(setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes))==-1){
-        fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+    if(1){
+        //设置连接超时检测------------------------------------------------------------------
+        yes = 1;//开启keepalive属性
+        if(setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes))==-1){
+            fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+        }
+        yes = 5;//如该连接在27秒内没有任何数据往来，则进行探测
+        if(setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, &yes, sizeof(yes))==-1){
+            fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+        }
+        yes = 2;//探测时发包的时间间隔为1秒
+        if(setsockopt(fd, SOL_TCP, TCP_KEEPINTVL, &yes, sizeof(yes))==-1){
+            fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+        }
+        yes = 2;//探测尝试的次数，如果第1次探测包就收到响应了，则后2次的不再发
+        if(setsockopt(fd, SOL_TCP, TCP_KEEPCNT, &yes, sizeof(yes))==-1){
+            fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+        }
+        
+        /* 
+           This option takes an unsigned int as an argument.  When the value is greater than 0,  it  specifies  the
+              maximum  amount  of time in milliseconds that transmitted data may remain unacknowledged before TCP will
+              forcibly close the corresponding connection and return ETIMEDOUT to  the  application.   If  the  option
+              value is specified as 0, TCP will use the system default.
+           when  used  with  the  TCP  keepalive  (SO_KEEPALIVE)  option, TCP_USER_TIMEOUT will override
+              keepalive to determine when to close a connection due to keepalive failure.
+         */
+
+    //     yes = 1000;//10秒内数据发送不成功
+    //     if(setsockopt(fd, SOL_TCP, TCP_USER_TIMEOUT, &yes, sizeof(yes))==-1){
+    //         fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+    //     }
     }
-    yes = 5;//如该连接在27秒内没有任何数据往来，则进行探测
-    if(setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, &yes, sizeof(yes))==-1){
-        fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
+
+    /* man 7 tcp */
+    if(0){
+        /* keepAlive */
+        int keepAlive = 1; // 开启keepalive属性
+        int keepIdle = 5; // 如该连接在60秒内没有任何数据往来,则进行探测 
+        int keepInterval = 1; // 探测时发包的时间间隔为5 秒
+        int keepCount = 2; // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.
+        setsockopt(connectfd, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepAlive, sizeof(keepAlive));
+        setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPIDLE, (void*)&keepIdle, sizeof(keepIdle));
+        setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
+        setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
     }
-    yes = 2;//探测时发包的时间间隔为1秒
-    if(setsockopt(fd, SOL_TCP, TCP_KEEPINTVL, &yes, sizeof(yes))==-1){
-        fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
-    }
-    yes = 2;//探测尝试的次数，如果第1次探测包就收到响应了，则后2次的不再发
-    if(setsockopt(fd, SOL_TCP, TCP_KEEPCNT, &yes, sizeof(yes))==-1){
-        fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
-    }
-    yes = 1000;//10秒内数据发送不成功
-    if(setsockopt(fd, SOL_TCP, TCP_USER_TIMEOUT, &yes, sizeof(yes))==-1){
-        fprintf(stderr,"Set Socket Option:%s\n\a",strerror(errno));
-    }
-                /* keepAlive */
-//                 int keepAlive = 1; // 开启keepalive属性
-//                 int keepIdle = 5; // 如该连接在60秒内没有任何数据往来,则进行探测 
-//                 int keepInterval = 1; // 探测时发包的时间间隔为5 秒
-//                 int keepCount = 2; // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.
-//                 setsockopt(connectfd, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepAlive, sizeof(keepAlive));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPIDLE, (void*)&keepIdle, sizeof(keepIdle));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
-//                 setsockopt(connectfd, IPPROTO_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
 }
 int main(){
     int listenfd,connectfd;

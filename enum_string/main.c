@@ -96,6 +96,6 @@ static const char *FRUIT_STRING[] = {
 int main(int argc, const char *argv[])
 {
 	
-    print_dbg("[enum,string] = [%d,%s]\n", apple,FRUIT_STRING[apple]);
+    print_dbg("[enum,string] = [%d,%s]\n", apple, FRUIT_STRING[apple]);
 	return 0;
 }

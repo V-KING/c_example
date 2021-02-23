@@ -1,8 +1,11 @@
 
 target=client
 
+CROSS_COMPILE?=
+
 CFLAGS=-std=gnu9x -g
-CC=gcc
+
+CC=$(CROSS_COMPILE)gcc
 
 all:client server test
 
